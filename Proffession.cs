@@ -28,7 +28,6 @@ internal class Proffession
     };
     internal static void ShowProff()
     {
-        Console.Clear();
         Console.WriteLine($"Vad är ditt yrke? 1-{proffList.Count} ");
         Console.WriteLine("Alla yrken börjar med 3st hälsodrycker som helar 10 hälsopoäng.");
         Console.WriteLine("Magiker och Druider börjar även med 2st magidrycker som ger tillbaka 10 magipoäng.");

@@ -8,11 +8,9 @@ namespace MINI_RPG;
 
 internal class Magician : Character
 {
-    public Magician(string name, string race, string proff,
-                    int str, int intel, int phy,
-                    int hp, int mp)
-        : base(name, race, proff, str, intel, phy, hp, mp)
+    public Magician() : base()
     {
+        Class = Proffession.proffList[1].ProffName;
         Magicpotions = 2;
     }
     public override int Ability()

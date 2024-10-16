@@ -8,11 +8,9 @@ namespace MINI_RPG;
 
 internal class Warrior : Character
 {
-    public Warrior(string name, string race, string proff,
-                    int str, int intel, int phy,
-                    int hp, int mp)
-        : base(name, race, proff, str, intel, phy, hp, mp)
+    public Warrior() : base()
     {
+        Class = Proffession.proffList[0].ProffName;
     }
     public override int Ability()
     {

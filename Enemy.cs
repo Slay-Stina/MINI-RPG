@@ -11,10 +11,12 @@ internal class Enemy : Character
     private static readonly string[] EnemyNames = { "Goblin", "Ork", "Troll", "Skelett", "Spindel" };
     private static readonly string[] Weapons = { "svärd", "pilbåge", "klubb", "dolk", "spjut" };
     public string Weapon { get; }
-    public Enemy(int level) : base(RandomEnemyName(), "Monster", "Fiende",
-                                    CalculateStrength(level), CalculateIntelligence(level),
-                                    CalculatePhysique(level), 0, 0)
+    public Enemy(int level) 
     {
+        Name = RandomEnemyName();
+        Strength = CalculateStrength(level);
+        Intelligence = CalculateIntelligence(level);
+        Physique = CalculatePhysique(level);
         Weapon = RandomWeapon();
         Health = CalculateHealth(level, Physique);
         MaxHP = Health;

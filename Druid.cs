@@ -9,11 +9,9 @@ namespace MINI_RPG;
 internal class Druid : Character
 {
     private static readonly string[] Animalform = { "Björn", "Örn", "Varg", "Järv", "Spindel" };
-    public Druid(string name, string race, string proff,
-                    int str, int intel, int phy,
-                    int hp, int mp)
-        : base(name, race, proff, str, intel, phy, hp, mp)
+    public Druid() : base()
     {
+        Class = Proffession.proffList[3].ProffName;
         Magicpotions = 2;
     }
     private static string RandomAnimalform()

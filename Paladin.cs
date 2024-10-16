@@ -8,11 +8,9 @@ namespace MINI_RPG;
 
 internal class Paladin : Character
 {
-    public Paladin(string name, string race, string proff,
-                    int str, int intel, int phy,
-                    int hp, int mp)
-        : base(name, race, proff, str, intel, phy, hp, mp)
+    public Paladin() : base()
     {
+        Class = Proffession.proffList[2].ProffName;
     }
 
     public override int Ability()

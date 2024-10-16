@@ -9,26 +9,15 @@ namespace MINI_RPG;
 
 internal class Character : Creature
 {
-    public string Class { get; }
+    public string Class { get; set; }
+    public string Type { get; set; }
     public int Healthpotions { get; set; }
     public int Magicpotions { get; set; }
     public int MaxHP { get; set; }
-    public int MaxMP { get; }
-    public Character(string name, string race, string proff,
-                        int str, int intel,
-                        int phy, int hp, int mp)
+    public int MaxMP { get; set; }
+    public Character()
     {
-        Name = name;
-        Type = race;
-        Class = proff;
-        Strength = str;
-        Intelligence = intel;
-        Physique = phy;
-        Health = hp;
-        Magic = mp;
         Healthpotions = 3;
-        MaxHP = Health;
-        MaxMP = Magic;
     }
 
     // Hämtar namn på alla klassmedlemmar och dess värden i objektet
@@ -67,7 +56,7 @@ internal class Character : Creature
     {
         Random rnd = new Random();
         Console.WriteLine($"Nu kommer vi slå för {attribute}!\nVi slår 4st T6 och tar bort den sämsta!");
-        Program.PressKeyToContinue();
+        Check.AnyKey();
 
         List<int> rollList = new List<int>();
 
@@ -87,65 +76,70 @@ internal class Character : Creature
         Console.WriteLine($"\nDin bonus för {attribute} för att du är en {race.ToLower()} är +{bonus}.");
         int result = rollList.Sum() + bonus;
         Console.WriteLine($"Din totala {attribute} blir: {result}");
-        Program.PressKeyToContinue();
+        Check.AnyKey();
         return result;
     }
     // Skapa ny karaktär
-    public static Character Creation()
+    public static Character Creation(Character player)
     {
         Console.WriteLine("\nSkapa en ny karaktär!");
 
         Console.Write("\nNamn: ");
         string name = Console.ReadLine();
 
+        // Välj Yrke
+        Console.Clear();
+        Proffession.ShowProff();
+        Proffession ChosenProff = Proffession.proffList[Check.ValidIntInput(1, Proffession.proffList.Count) - 1];
+
+        switch (ChosenProff.ProffName.ToLower())
+        {
+            case "krigare":
+                player = new Warrior();
+                break;
+            case "magiker":
+                player = new Magician();
+                break;
+            case "riddare":
+                player = new Paladin();
+                break;
+            case "druid":
+                player = new Druid();
+                break;
+            default:
+                player = new Character();
+                break;
+        }
+        player.Name = name;
+
         // Välj släkte
+        Console.Clear();
         Race.ShowRaces();
         Race chosenRace = Race.raceList[Check.ValidIntInput(1, Race.raceList.Count) - 1];
-        string race = chosenRace.RaceName;
+        player.Type = chosenRace.RaceName;
         Console.Clear();
 
         // Slå fram dina attribut
-        int str = RollAttribute(chosenRace.StrengthBonus, chosenRace.RaceName, "styrka");
+        player.Strength = RollAttribute(chosenRace.StrengthBonus, chosenRace.RaceName, "styrka");
 
-        int intel = RollAttribute(chosenRace.IntelligenceBonus, chosenRace.RaceName, "intelligens");
+        player.Intelligence = RollAttribute(chosenRace.IntelligenceBonus, chosenRace.RaceName, "intelligens");
 
-        int phy = RollAttribute(chosenRace.PhysiqueBonus, chosenRace.RaceName, "fysik");
+        player.Physique = RollAttribute(chosenRace.PhysiqueBonus, chosenRace.RaceName, "fysik");
 
-        // Välj Yrke
-        Proffession.ShowProff();
-        Proffession ChosenProff = Proffession.proffList[Check.ValidIntInput(1, Proffession.proffList.Count) - 1];
-        string proff = ChosenProff.ProffName;
+        
 
         // Räkna fram hälsa och magi
         Console.Clear();
-        int HP = phy + ChosenProff.HPBonus;
-        int MP = intel + ChosenProff.MPBonus;
-        Console.WriteLine($"Din hälsa är baserat på din fysik och ditt yrke vilket tillsammans blir {HP} hälsopoäng!");
-        Console.WriteLine($"Din magi är baserat på din intelligens och ditt yrke vilket tillsammans blir {MP} magipoäng");
-        Program.PressKeyToContinue();
+        player.Health = player.Physique + ChosenProff.HPBonus;
+        player.Magic = player.Intelligence + ChosenProff.MPBonus;
+        player.MaxHP = player.Health;
+        player.MaxMP = player.Magic;
+        Console.WriteLine($"Din hälsa är baserat på din fysik och ditt yrke vilket tillsammans blir {player.Health} hälsopoäng!");
+        Console.WriteLine($"Din magi är baserat på din intelligens och ditt yrke vilket tillsammans blir {player.Magic} magipoäng");
+        Check.AnyKey();
 
-        // Skapa karaktären
-        Character character;
-
-        switch (proff.ToLower())
-        {
-            case "krigare":
-                character = new Warrior(name, race, proff, str, intel, phy, HP, MP);
-                break;
-            case "magiker":
-                character = new Magician(name, race, proff, str, intel, phy, HP, MP);
-                break;
-            case "riddare":
-                character = new Paladin(name, race, proff, str, intel, phy, HP, MP);
-                break;
-            case "druid":
-                character = new Druid(name, race, proff, str, intel, phy, HP, MP);
-                break;
-            default:
-                character = new Character(name, race, proff, str, intel, phy, HP, MP);
-                break;
-        }
-        return character;
+        
+        return player;
     }
     // Använd din specialattack
     public virtual int Ability()
@@ -177,7 +171,7 @@ internal class Character : Creature
             {
                 Console.WriteLine($"{this.Name} har full hälsa och kan inte dricka fler hälsodrycker.");
             }
-            Program.PressKeyToContinue();
+            Check.AnyKey();
         }
         else if (potionType == "MP")
         {
@@ -199,7 +193,7 @@ internal class Character : Creature
             {
                 Console.WriteLine($"{this.Name} har full magi och kan inte dricka fler magidrycker.");
             }
-            Program.PressKeyToContinue();
+            Check.AnyKey();
         }
         else
         {

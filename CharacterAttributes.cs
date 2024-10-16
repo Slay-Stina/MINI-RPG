@@ -9,8 +9,8 @@ namespace MINI_RPG;
 internal enum CharacterAttributes
 {
     Name,
-    Race,
-    Proffession,
+    Class,
+    Type,
     Strength,
     Intelligence,
     Physique,
